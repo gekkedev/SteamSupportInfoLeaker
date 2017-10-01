@@ -1,7 +1,7 @@
 # SteamSupportInfoLeaker
 Adds Steam game support info to store pages. More specifically, support website and mail address of the publisher are being shown.
 
-##Usage
+## Usage
 1. Go to the [Steam store](http://store.steampowered.com).
 2. Click on any game of your choice. (no pack)
 3. In the box located at the right top, you'll see the additional information. Both are clickable links.

@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.1
+// @version      0.1.1
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        *://store.steampowered.com/app/*
 // @grant        none
-// @updateURL https://raw.githubusercontent.com/gekkedev/SteamSupportInfoLeaker/master/SteamSupportInfoLeaker.user.js
-// @downloadURL https://raw.githubusercontent.com/gekkedev/SteamSupportInfoLeaker/master/SteamSupportInfoLeaker.user.js
+// @updateURL    https://raw.githubusercontent.com/gekkedev/SteamSupportInfoLeaker/master/SteamSupportInfoLeaker.user.js
+// @downloadURL  https://raw.githubusercontent.com/gekkedev/SteamSupportInfoLeaker/master/SteamSupportInfoLeaker.user.js
 // ==/UserScript==
 
 (function() {
@@ -41,7 +41,7 @@
             var mail = data[id].data.support_info.email;
             mail = mail.length == 0 ? 'none' : '<a href="mailto:' + mail + '">' + mail + '</a>';
             var website = data[id].data.support_info.url;
-            website = website.length == 0 ? 'none' : '<a href="' + website + '">' + website + '</a>';
+            website = website.length == 0 ? 'none' : '<a href="' + website + '" target="_blank">' + website + '</a>';
             var support_html = '<div class="subtitle column"><br>Support website:</div> ' + website + '<br><div class="subtitle column">Support E-Mail:</div> ' + mail;
             document.getElementsByClassName("glance_ctn_responsive_left")[0].innerHTML += support_html;
             console.log("Game support info successfully inserted into site!");

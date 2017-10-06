@@ -1,16 +1,30 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.1.1
+// @version      0.2
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        *://store.steampowered.com/app/*
-// @grant        none
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @grant        GM_registerMenuCommand
 // @updateURL    https://raw.githubusercontent.com/gekkedev/SteamSupportInfoLeaker/master/SteamSupportInfoLeaker.user.js
 // @downloadURL  https://raw.githubusercontent.com/gekkedev/SteamSupportInfoLeaker/master/SteamSupportInfoLeaker.user.js
 // ==/UserScript==
 
 (function() {
+    var subject  = GM_getValue ("subject",  "Support request for the game: ");
+    GM_registerMenuCommand ("Change mail subject", changeSubject);
+    function changeSubject() {
+        GM_setValue("subject", prompt("Enter a new subject which will appear in front of the game title: ", subject));
+        location.reload();
+    }
+    var body  = GM_getValue ("body",  "Hello! I've got a problem with the game and need support. [DESCRIBE YOUR PROBLEM HERE]");
+    GM_registerMenuCommand ("Change mail body", changeBody);
+    function changeBody() {
+        GM_setValue("body", prompt("Enter a default mail body: ", body));
+        location.reload();
+    }
     var loadJSON = function(path, success, error)
     {
         var xhr = new XMLHttpRequest();
@@ -39,7 +53,8 @@
         function(data) {
             //console.log(data[id].data.support_info);
             var mail = data[id].data.support_info.email;
-            mail = mail.length == 0 ? 'none' : '<a href="mailto:' + mail + '">' + mail + '</a>';
+            var gamename = data[id].data.name;
+            mail = mail.length == 0 ? 'none' : '<a href="https://mail.google.com/mail/?view=cm&fs=1&su=' + subject + gamename + '&body=' + body + '&to=' + mail + '">' + mail + '</a>';
             var website = data[id].data.support_info.url;
             website = website.length == 0 ? 'none' : '<a href="' + website + '" target="_blank">' + website + '</a>';
             var support_html = '<div class="subtitle column"><br>Support website:</div> ' + website + '<br><div class="subtitle column">Support E-Mail:</div> ' + mail;

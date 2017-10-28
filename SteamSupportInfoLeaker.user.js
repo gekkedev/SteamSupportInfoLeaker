@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.3
+// @version      0.3.1
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        *://store.steampowered.com/app/*
@@ -31,15 +31,18 @@
     GM_registerMenuCommand("Go to new releases", function(){
         window.location.href = searchurl + "?sort_by=Released_DESC";
     });
-    getSupportMail = function(appid, mailbutton) {
+    setSupportMail = function(appid, mailbutton) {
         loadJSON("http://store.steampowered.com/api/appdetails/?appids=" + appid,
             function(data) {
-                var mail = data[appid].data.support_info.email;//console.log(mailbutton);
+                var mail = data[appid].data.support_info.email;
                 var gamename = data[appid].data.name;
-                //mail = mail.length == 0 ? 'no mail address found' : '<a target="_blank" href="https://mail.google.com/mail/?view=cm&fs=1&su=' + subject + gamename + '&body=' + body + '&to=' + mail + '">' + mail + '</a>';
-                mailbutton.innerHTML = "Send mail to " + mail;
-                mailbutton.setAttribute("target", "_blank");
-                mailbutton.setAttribute("href", 'https://mail.google.com/mail/?view=cm&fs=1&su=' + subject + gamename + '&body=' + body + '&to=' + mail);
+                if (mail.length == 0) {
+                    mailbutton.innerHTML = "No mail address found!";
+                } else {
+                    mailbutton.innerHTML = "Send mail to " + mail;
+                    mailbutton.setAttribute("target", "_blank");
+                    mailbutton.setAttribute("href", 'https://mail.google.com/mail/?view=cm&fs=1&su=' + subject + gamename + '&body=' + body + '&to=' + mail);
+                }
             },
             function(xhr) { console.error(xhr); }
         );
@@ -91,18 +94,16 @@
         for (var i = 0, len = games.length; i < len; i++) {
             var game = games[i];
             var appid = game.getAttribute("data-ds-appid");
-            var gamename = games[i].getElementsByClassName("title")[0];
+            //var gamename = games[i].getElementsByClassName("title")[0];
+            var gameplatform = games[i].getElementsByClassName("platform_img")[0];
             var button = document.createElement("a");
             button.setAttribute("class", "btnv6_blue_hoverfade btn_small");
             button.setAttribute("id", "mailbtn" + appid);
-            //button.setAttribute("onclick", "getSupportMail(" + appid + ", this)");
             button.innerHTML = "getting support mail address...";
-            insertAfter(button, game);
+            insertAfter(button, gameplatform);
             (function (appid, button) {
-                setTimeout(function(){getSupportMail(appid, button);}, i*650);
+                setTimeout(function(){setSupportMail(appid, button);}, i*650);
             })(appid, button);
-            //console.log(gamename);
-            //gamename.innerHTML += ' <a href="#" onclick"return true;" class="btnv6_blue_hoverfade btn_small">Get support mail address</a>';
         }
     }
 })();

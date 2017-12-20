@@ -1,5 +1,5 @@
 # SteamSupportInfoLeaker
-Adds Steam game support info to store pages. More specifically, support website and mail address of the publisher are being shown.
+Adds Steam game support info to store pages. More specifically, support website and mail address of the publisher are being shown. It makes GMail sending buttons on store pages appear in order to file complaints or bug reports way faster.
 
 ## Usage
 1. Go to the [Steam store](http://store.steampowered.com).

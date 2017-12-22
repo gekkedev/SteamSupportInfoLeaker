@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.4.5
+// @version      0.4.6
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        *://store.steampowered.com/*
@@ -130,7 +130,7 @@
                 document.getElementsByClassName("glance_ctn_responsive_left")[0].innerHTML += getReportInfo(id);
                 var mail = data[id].data.support_info.email;
                 var gamename = data[id].data.name;
-                mail = mail.length == 0 ? 'none' : '<a onclick="saveState('+id+');" href="https://mail.google.com/mail/?view=cm&fs=1&su=' + subject + gamename + '&body=' + body + '&to=' + mail + '">' + mail + '</a>';
+                mail = mail.length == 0 ? 'none' : '<a onclick="saveState('+id+');" target="_blank" href="https://mail.google.com/mail/?view=cm&fs=1&su=' + subject + gamename + '&body=' + body + '&to=' + mail + '">' + mail + '</a>';
                 var website = data[id].data.support_info.url;
                 website = website.length == 0 ? 'none' : '<a href="' + website + '" target="_blank">' + website + '</a>';
                 var support_html = '<div class="subtitle column"><br>Support website:</div> ' + website + '<br><div class="subtitle column">Support E-Mail:</div> ' + mail;

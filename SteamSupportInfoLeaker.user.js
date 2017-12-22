@@ -1,11 +1,10 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.4
+// @version      0.4.1
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
-// @match        *://store.steampowered.com/app/*
-// @match        *://store.steampowered.com/search/*
+// @match        *://store.steampowered.com/*
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_registerMenuCommand
@@ -14,7 +13,8 @@
 // ==/UserScript==
 
 (function() {
-    searchurl = "http://store.steampowered.com/search/";
+    searchurl = "store.steampowered.com/search/";
+    singleviewurl = "store.steampowered.com/app/";
 
     var savestate  = GM_getValue ("savestate",  false);
     savedstates  = GM_getValue ("savedstates",  []);
@@ -111,7 +111,7 @@
         xhr.open("GET", path, true);
         xhr.send();
     };
-    if (document.URL.indexOf("store.steampowered.com/app/") != -1) {
+    if (document.URL.indexOf(singleviewurl) != -1) {
         var url = window.location.pathname;
         var firstpos = url.indexOf('/app/') + 5;//5 is the length of the searchstring "/app/"
         var length = url.substring(firstpos).indexOf('/');

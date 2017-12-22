@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.4.2
+// @version      0.4.3
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        *://store.steampowered.com/*
@@ -64,7 +64,7 @@
     GM_registerMenuCommand ("Change mail subject", changeSubject);
     function changeSubject() {
         var result = prompt("Enter a new subject which will appear in front of the game title: ", subject);
-        if (result  != null) {
+        if (result  !== null) {
             GM_setValue("subject", result));
             location.reload();
         }
@@ -73,7 +73,7 @@
     GM_registerMenuCommand ("Change mail body", changeBody);
     function changeBody() {
         var result = prompt("Enter a default mail body: ", body);
-        if (result  != null) {
+        if (result  !== null) {
             GM_setValue("body", result));
             location.reload();
         }

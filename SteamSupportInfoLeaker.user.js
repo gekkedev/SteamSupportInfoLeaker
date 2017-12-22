@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.4.4
+// @version      0.4.5
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        *://store.steampowered.com/*
@@ -79,7 +79,7 @@
         }
     }
     GM_registerMenuCommand("Go to new releases", function(){
-        window.location.href = searchurl + "?sort_by=Released_DESC";
+        window.location.href = "http://" + searchurl + "?sort_by=Released_DESC";
     });
     setSupportMail = function(appid, mailbutton) {
         loadJSON("http://store.steampowered.com/api/appdetails/?appids=" + appid,

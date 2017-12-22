@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.3.1
+// @version      0.4
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        *://store.steampowered.com/app/*
@@ -15,6 +15,50 @@
 
 (function() {
     searchurl = "http://store.steampowered.com/search/";
+
+    var savestate  = GM_getValue ("savestate",  false);
+    savedstates  = GM_getValue ("savedstates",  []);
+    saveState = function(id){
+        //id = parseInt(id);
+        if (savestate) {
+            if (savedstates.indexOf(id) == -1) {
+                savedstates.push(id);
+                GM_setValue('savedstates', savedstates);
+            }
+        }
+    };
+    var getReportInfo = function(appid) {
+        var reportinfo = document.createElement("span");
+        if (savestate) {
+            if (savedstates.indexOf(parseInt(appid)) == -1) {
+                reportinfo.setAttribute("style", "color:green; font-size:10px;");
+                reportinfo.innerHTML = "(Bug not reported yet - " + savedstates.length + " totally)";
+            } else {
+                reportinfo.setAttribute("style", "color:red");
+                reportinfo.innerHTML = "(Bug already reported - " + savedstates.length + " totally)";
+            }
+        }
+        return reportinfo.outerHTML;
+    };
+    if (savestate) {
+        GM_registerMenuCommand ("Do not save shipping state", triggerStatesave);
+    } else {
+        GM_registerMenuCommand ("Save shipping state", triggerStatesave);
+    }
+    function triggerStatesave() {
+        if (savestate) {
+            if (prompt("Type in \"yes\" in order to confirm that you want to wipe the shipping state memory: ", "no") == "yes") {
+                GM_setValue('savedstates', []);
+                GM_setValue("savestate", false);
+                alert("Shipping state saving has been disabled");
+                location.reload();
+            }
+        } else {
+            GM_setValue("savestate", alert("Shipping state saving has been enabled"), true);
+            GM_setValue("savestate", true);
+            location.reload();
+        }
+    }
 
     var subject  = GM_getValue ("subject",  "Support request for the game: ");
     GM_registerMenuCommand ("Change mail subject", changeSubject);
@@ -77,9 +121,10 @@
         loadJSON('http://store.steampowered.com/api/appdetails/?appids=' + id,
             function(data) {
                 //console.log(data[id].data.support_info);
+                document.getElementsByClassName("glance_ctn_responsive_left")[0].innerHTML += getReportInfo(id);
                 var mail = data[id].data.support_info.email;
                 var gamename = data[id].data.name;
-                mail = mail.length == 0 ? 'none' : '<a href="https://mail.google.com/mail/?view=cm&fs=1&su=' + subject + gamename + '&body=' + body + '&to=' + mail + '">' + mail + '</a>';
+                mail = mail.length == 0 ? 'none' : '<a onclick="saveState('+id+');" href="https://mail.google.com/mail/?view=cm&fs=1&su=' + subject + gamename + '&body=' + body + '&to=' + mail + '">' + mail + '</a>';
                 var website = data[id].data.support_info.url;
                 website = website.length == 0 ? 'none' : '<a href="' + website + '" target="_blank">' + website + '</a>';
                 var support_html = '<div class="subtitle column"><br>Support website:</div> ' + website + '<br><div class="subtitle column">Support E-Mail:</div> ' + mail;
@@ -98,9 +143,11 @@
             var gameplatform = games[i].getElementsByClassName("platform_img")[0];
             var button = document.createElement("a");
             button.setAttribute("class", "btnv6_blue_hoverfade btn_small");
+            button.setAttribute("onclick", "saveState(" + appid + ");");
             button.setAttribute("id", "mailbtn" + appid);
             button.innerHTML = "getting support mail address...";
             insertAfter(button, gameplatform);
+            game.getElementsByClassName("title")[0].innerHTML += getReportInfo(appid);
             (function (appid, button) {
                 setTimeout(function(){setSupportMail(appid, button);}, i*650);
             })(appid, button);

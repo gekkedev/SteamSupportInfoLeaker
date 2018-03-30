@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.4.6
+// @version      0.4.7
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
-// @match        *://store.steampowered.com/*
+// @match        https?://store.steampowered.com/*
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_registerMenuCommand

@@ -1,29 +1,30 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.4.7
+// @version      0.5
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        https?://store.steampowered.com/*
-// @grant        GM_getValue
-// @grant        GM_setValue
-// @grant        GM_registerMenuCommand
+// @grant        GM.getValue
+// @grant        GM.setValue
+// @grant        GM.registerMenuCommand
 // @updateURL    https://raw.githubusercontent.com/gekkedev/SteamSupportInfoLeaker/master/SteamSupportInfoLeaker.user.js
 // @downloadURL  https://raw.githubusercontent.com/gekkedev/SteamSupportInfoLeaker/master/SteamSupportInfoLeaker.user.js
+// @require https://greasemonkey.github.io/gm4-polyfill/gm4-polyfill.js
 // ==/UserScript==
 
 (function() {
     searchurl = "store.steampowered.com/search/";
     singleviewurl = "store.steampowered.com/app/";
 
-    var savestate  = GM_getValue ("savestate",  false);
-    savedstates  = GM_getValue ("savedstates",  []);
+    var savestate  = GM.getValue ("savestate",  false);
+    savedstates  = GM.getValue ("savedstates",  []);
     saveState = function(id){
         //id = parseInt(id);
         if (savestate) {
             if (savedstates.indexOf(id) == -1) {
                 savedstates.push(id);
-                GM_setValue('savedstates', savedstates);
+                GM.setValue('savedstates', savedstates);
             }
         }
     };
@@ -41,44 +42,44 @@
         return reportinfo.outerHTML;
     };
     if (savestate) {
-        GM_registerMenuCommand ("Do not save shipping state", triggerStatesave);
+        GM.registerMenuCommand ("Do not save shipping state", triggerStatesave);
     } else {
-        GM_registerMenuCommand ("Save shipping state", triggerStatesave);
+        GM.registerMenuCommand ("Save shipping state", triggerStatesave);
     }
     function triggerStatesave() {
         if (savestate) {
             if (prompt("Type in \"yes\" in order to confirm that you want to wipe the shipping state memory: ", "no") == "yes") {
-                GM_setValue('savedstates', []);
-                GM_setValue("savestate", false);
+                GM.setValue('savedstates', []);
+                GM.setValue("savestate", false);
                 alert("Shipping state saving has been disabled");
                 location.reload();
             }
         } else {
-            GM_setValue("savestate", alert("Shipping state saving has been enabled"), true);
-            GM_setValue("savestate", true);
+            GM.setValue("savestate", alert("Shipping state saving has been enabled"), true);
+            GM.setValue("savestate", true);
             location.reload();
         }
     }
 
-    var subject  = GM_getValue ("subject",  "Support request for the game: ");
-    GM_registerMenuCommand ("Change mail subject", changeSubject);
+    var subject  = GM.getValue ("subject",  "Support request for the game: ");
+    GM.registerMenuCommand ("Change mail subject", changeSubject);
     function changeSubject() {
         var result = prompt("Enter a new subject which will appear in front of the game title: ", subject);
         if (result  !== null) {
-            GM_setValue("subject", result);
+            GM.setValue("subject", result);
             location.reload();
         }
     }
-    var body  = GM_getValue ("body",  "Hello! I've got a problem with the game and need support. [DESCRIBE YOUR PROBLEM HERE]");
-    GM_registerMenuCommand ("Change mail body", changeBody);
+    var body  = GM.getValue ("body",  "Hello! I've got a problem with the game and need support. [DESCRIBE YOUR PROBLEM HERE]");
+    GM.registerMenuCommand ("Change mail body", changeBody);
     function changeBody() {
         var result = prompt("Enter a default mail body: ", body);
         if (result  !== null) {
-            GM_setValue("body", result);
+            GM.setValue("body", result);
             location.reload();
         }
     }
-    GM_registerMenuCommand("Go to new releases", function(){
+    GM.registerMenuCommand("Go to new releases", function(){
         window.location.href = "http://" + searchurl + "?sort_by=Released_DESC";
     });
     setSupportMail = function(appid, mailbutton) {

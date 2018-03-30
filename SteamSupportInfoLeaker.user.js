@@ -4,7 +4,7 @@
 // @version      0.5
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
-// @match        https?://store.steampowered.com/*
+// @match        *://store.steampowered.com/*
 // @grant        GM.getValue
 // @grant        GM.setValue
 // @grant        GM.registerMenuCommand

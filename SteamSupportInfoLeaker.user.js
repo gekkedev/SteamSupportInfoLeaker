@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.5
+// @version      0.5.1
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        *://store.steampowered.com/*
@@ -13,12 +13,12 @@
 // @require https://greasemonkey.github.io/gm4-polyfill/gm4-polyfill.js
 // ==/UserScript==
 
-(function() {
+(async () => {
     searchurl = "store.steampowered.com/search/";
     singleviewurl = "store.steampowered.com/app/";
 
-    var savestate  = GM.getValue ("savestate",  false);
-    savedstates  = GM.getValue ("savedstates",  []);
+    var savestate = await GM.getValue ("savestate",  false);
+    savedstates = await GM.getValue ("savedstates",  []);
     saveState = function(id){
         //id = parseInt(id);
         if (savestate) {
@@ -61,7 +61,7 @@
         }
     }
 
-    var subject  = GM.getValue ("subject",  "Support request for the game: ");
+    var subject = await GM.getValue ("subject",  "Support request for the game: ");
     GM.registerMenuCommand ("Change mail subject", changeSubject);
     function changeSubject() {
         var result = prompt("Enter a new subject which will appear in front of the game title: ", subject);
@@ -70,7 +70,7 @@
             location.reload();
         }
     }
-    var body  = GM.getValue ("body",  "Hello! I've got a problem with the game and need support. [DESCRIBE YOUR PROBLEM HERE]");
+    var body = await GM.getValue ("body",  "Hello! I've got a problem with the game and need support. [DESCRIBE YOUR PROBLEM HERE]");
     GM.registerMenuCommand ("Change mail body", changeBody);
     function changeBody() {
         var result = prompt("Enter a default mail body: ", body);

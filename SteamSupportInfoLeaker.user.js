@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Steam Support Info Leaker
 // @namespace    https://github.com/gekkedev/SteamSupportInfoLeaker
-// @version      0.5.1
+// @version      0.5.2
 // @description  Adds Steam game support info to store pages.
 // @author       gekkedev
 // @match        *://store.steampowered.com/*
@@ -83,7 +83,7 @@
         window.location.href = "http://" + searchurl + "?sort_by=Released_DESC";
     });
     setSupportMail = function(appid, mailbutton) {
-        loadJSON("http://store.steampowered.com/api/appdetails/?appids=" + appid,
+        loadJSON("https://store.steampowered.com/api/appdetails/?appids=" + appid,
             function(data) {
                 var mail = data[appid].data.support_info.email;
                 var gamename = data[appid].data.name;
@@ -125,7 +125,7 @@
         console.log("ID length: " + length);
         var id = url.substring(firstpos, firstpos + length);
         console.log("Getting game support info: " + id);
-        loadJSON('http://store.steampowered.com/api/appdetails/?appids=' + id,
+        loadJSON('https://store.steampowered.com/api/appdetails/?appids=' + id,
             function(data) {
                 //console.log(data[id].data.support_info);
                 document.getElementsByClassName("glance_ctn_responsive_left")[0].innerHTML += getReportInfo(id);
